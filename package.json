@@ -1,0 +1,25 @@
+{
+  "name": "textdecode",
+  "version": "0.0.1",
+  "description": "Several text decoders to UTF32.",
+  "main": "./lib/index.js",
+  "scripts": {
+    "test": "mocha lib/*.test.js",
+    "tsc": "tsc",
+    "watch": "tsc -w",
+    "lint": "tslint 'src/**/*.ts'"
+  },
+  "author": "Joerg Breitbart <j.breitbart@netzkolchose.de>",
+  "license": "MIT",
+  "dependencies": {
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.5",
+    "@types/node": "^10.12.15",
+    "@types/utf8": "^2.1.6",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "tslint": "^5.11.0",
+    "typescript": "^3.2.2",
+    "utf8": "^3.0.0"
+  }
+}
