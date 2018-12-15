@@ -7,7 +7,8 @@
     "test": "mocha lib/*.test.js",
     "tsc": "tsc",
     "watch": "tsc -w",
-    "lint": "tslint 'src/**/*.ts'"
+    "lint": "tslint 'src/**/*.ts'",
+    "benchmark": "xterm-benchmark"
   },
   "author": "Joerg Breitbart <j.breitbart@netzkolchose.de>",
   "license": "MIT",
@@ -20,6 +21,7 @@
     "mocha": "^5.2.0",
     "tslint": "^5.11.0",
     "typescript": "^3.2.2",
-    "utf8": "^3.0.0"
+    "utf8": "^3.0.0",
+    "xterm-benchmark": "git+https://github.com/xtermjs/xterm-benchmark.git"
   }
 }
