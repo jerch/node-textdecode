@@ -30,6 +30,7 @@ export class Utf8Decoder {
    * and decode them with the next data chunk.
    * Note: The method does no bound checks for target, therefore make sure
    * the provided data chunk does not exceed the size of `target`.
+   * Returns the number of written codepoints in `target`.
    */
   decode(input: Uint8Array, target: Uint32Array): number {
     const length = input.length;
@@ -103,106 +104,106 @@ export class Utf8Decoder {
     // loop through input
     let i = startPos;
     while (i < length) {
-        byte1 = input[i++];
+      byte1 = input[i++];
 
-        // 1 byte
-        if (byte1 < 0x80) {
-          target[size++] = byte1;
-        
+      // 1 byte
+      if (byte1 < 0x80) {
+        target[size++] = byte1;
+
         // 2 bytes
-        } else if ((byte1 & 0xE0) == 0xC0) {
-          if (i >= length) {
-            this.interim[0] = byte1;
-            return size;
-          }
-          byte2 = input[i++];
-          if ((byte2 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          codepoint = (byte1 & 0x1F) << 6 | (byte2 & 0x3F);
-          if (codepoint < 0x80) {
-            // wrong starter byte
-            i--;
-            continue;
-          }
-          target[size++] = codepoint;
-        
+      } else if ((byte1 & 0xE0) == 0xC0) {
+        if (i >= length) {
+          this.interim[0] = byte1;
+          return size;
+        }
+        byte2 = input[i++];
+        if ((byte2 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        codepoint = (byte1 & 0x1F) << 6 | (byte2 & 0x3F);
+        if (codepoint < 0x80) {
+          // wrong starter byte
+          i--;
+          continue;
+        }
+        target[size++] = codepoint;
+
         // 3 bytes
-        } else if ((byte1 & 0xF0) == 0xE0) {
-          if (i >= length) {
-            this.interim[0] = byte1;
-            return size;
-          }
-          byte2 = input[i++];
-          if ((byte2 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          if (i >= length) {
-            this.interim[0] = byte1;
-            this.interim[1] = byte2;
-            return size;
-          }
-          byte3 = input[i++];
-          if ((byte3 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          codepoint = (byte1 & 0x0F) << 12 | (byte2 & 0x3F) << 6 | (byte3 & 0x3F);
-          if (codepoint < 0x0800 || (codepoint >= 0xD800 && codepoint <= 0xDFFF)) {
-            // illegal codepoint, no i-- here
-            continue;
-          }
-          target[size++] = codepoint;
+      } else if ((byte1 & 0xF0) == 0xE0) {
+        if (i >= length) {
+          this.interim[0] = byte1;
+          return size;
+        }
+        byte2 = input[i++];
+        if ((byte2 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        if (i >= length) {
+          this.interim[0] = byte1;
+          this.interim[1] = byte2;
+          return size;
+        }
+        byte3 = input[i++];
+        if ((byte3 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        codepoint = (byte1 & 0x0F) << 12 | (byte2 & 0x3F) << 6 | (byte3 & 0x3F);
+        if (codepoint < 0x0800 || (codepoint >= 0xD800 && codepoint <= 0xDFFF)) {
+          // illegal codepoint, no i-- here
+          continue;
+        }
+        target[size++] = codepoint;
 
         // 4 bytes
-        } else if ((byte1 & 0xF8) == 0xF0) {
-          if (i >= length) {
-            this.interim[0] = byte1;
-            return size;
-          }
-          byte2 = input[i++];
-          if ((byte2 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          if (i >= length) {
-            this.interim[0] = byte1;
-            this.interim[1] = byte2;
-            return size;
-          }
-          byte3 = input[i++];
-          if ((byte3 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          if (i >= length) {
-            this.interim[0] = byte1;
-            this.interim[1] = byte2;
-            this.interim[2] = byte3;
-            return size;
-          }
-          byte4 = input[i++];
-          if ((byte4 & 0xC0) !== 0x80) {
-            // wrong continuation
-            i--;
-            continue;
-          }
-          codepoint = (byte1 & 0x07) << 18 | (byte2 & 0x3F) << 12 | (byte3 & 0x3F) << 6 | (byte4 & 0x3F);
-          if (codepoint < 0x010000 || codepoint > 0x10FFFF) {
-            // illegal codepoint, no i-- here
-            continue;
-          }
-          target[size++] = codepoint;
-        } else {
-          // illegal byte, just skip
+      } else if ((byte1 & 0xF8) == 0xF0) {
+        if (i >= length) {
+          this.interim[0] = byte1;
+          return size;
         }
+        byte2 = input[i++];
+        if ((byte2 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        if (i >= length) {
+          this.interim[0] = byte1;
+          this.interim[1] = byte2;
+          return size;
+        }
+        byte3 = input[i++];
+        if ((byte3 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        if (i >= length) {
+          this.interim[0] = byte1;
+          this.interim[1] = byte2;
+          this.interim[2] = byte3;
+          return size;
+        }
+        byte4 = input[i++];
+        if ((byte4 & 0xC0) !== 0x80) {
+          // wrong continuation
+          i--;
+          continue;
+        }
+        codepoint = (byte1 & 0x07) << 18 | (byte2 & 0x3F) << 12 | (byte3 & 0x3F) << 6 | (byte4 & 0x3F);
+        if (codepoint < 0x010000 || codepoint > 0x10FFFF) {
+          // illegal codepoint, no i-- here
+          continue;
+        }
+        target[size++] = codepoint;
+      } else {
+        // illegal byte, just skip
+      }
     }
     return size;
   }
@@ -228,6 +229,7 @@ export class Utf16Decoder {
    * surrogate pairs and decode them with the next data chunk.
    * Note: The method does no bound checks for target, therefore make sure
    * the provided input data does not exceed the size of `target`.
+   * Returns the number of written codepoints in `target`.
    */
   decode(input: Uint16Array, target: Uint32Array): number {
     const length = input.length;
@@ -280,6 +282,7 @@ export class Utf16Decoder {
    * surrogate pairs and decode them with the next data chunk.
    * Note: The method does no bound checks for target, therefore make sure
    * the provided input data does not exceed the size of `target`.
+   * Returns the number of written codepoints in `target`.
    */
   decodeString(input: string, target: Uint32Array): number {
     const length = input.length;
