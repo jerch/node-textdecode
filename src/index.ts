@@ -206,39 +206,6 @@ export class Utf8Decoder {
     }
     return size;
   }
-
-  decode_new(input: Uint8Array, target: Uint32Array): number {
-    let i, len, c;
-    let char2, char3;
-
-    len = input.length;
-    i = 0;
-    let size = 0;
-    while (i < len) {
-      c = input[i++];
-      switch (c >> 4)
-      { 
-        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-          // 0xxxxxxx
-          target[size++] = c;
-          break;
-        case 12: case 13:
-          // 110x xxxx   10xx xxxx
-          char2 = input[i++];
-          target[size++] = ((c & 0x1F) << 6) | (char2 & 0x3F);
-          break;
-        case 14:
-          // 1110 xxxx  10xx xxxx  10xx xxxx
-          char2 = input[i++];
-          char3 = input[i++];
-          target[size++] = ((c & 0x0F) << 12) |
-                                    ((char2 & 0x3F) << 6) |
-                                    ((char3 & 0x3F) << 0);
-          break;
-      }
-    }    
-    return size;
-  }
 }
 
 /**
