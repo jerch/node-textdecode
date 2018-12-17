@@ -21,7 +21,6 @@
     "mocha": "^5.2.0",
     "tslint": "^5.11.0",
     "typescript": "^3.2.2",
-    "utf8": "^3.0.0",
-    "xterm-benchmark": "git+https://github.com/xtermjs/xterm-benchmark.git"
+    "utf8": "^3.0.0"
   }
 }
