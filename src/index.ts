@@ -104,7 +104,8 @@ export class Utf8Decoder {
     // loop through input
     let i = startPos;
     while (i < length) {
-      byte1 = input[i++];
+      while (i < length && (target[size++] = input[i++]) < 0x80) {}
+      byte1 = target[--size];
 
       // 1 byte
       if (byte1 < 0x80) {
@@ -423,7 +424,8 @@ export class Utf8Decoder16 {
     // loop through input
     let i = startPos;
     while (i < length) {
-      byte1 = input[i++];
+      while (i < length && (target[size++] = input[i++]) < 0x80) {}
+      byte1 = target[--size];
 
       // 1 byte
       if (byte1 < 0x80) {
