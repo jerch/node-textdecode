@@ -101,16 +101,12 @@ export class Utf8Decoder {
       this.interim.fill(0);
     }
 
-
-    const fourStop = length - 8;
-
     // loop through input
+    const fourStop = length - 4;
     let i = startPos;
     while (i < length) {
 
       // ASCII shortcut with loop unrolled to 4 bytes
-      
-      
       while(i < fourStop
           && !((byte1 = input[i]) & 0x80)
           && !((byte2 = input[i + 1]) & 0x80)
@@ -123,22 +119,6 @@ export class Utf8Decoder {
         target[size++] = byte4;
         i += 4;
       }
-
-
-      /*
-      let k = 1;
-      while(i < fourStop
-        && (k = 2)
-        && !((byte1 = target[size++] = input[i++]) & 0x80)
-        && !((byte1 = target[size++] = input[i++]) & 0x80)
-        && !((byte1 = target[size++] = input[i++]) & 0x80)
-        && !((byte1 = target[size++] = input[i++]) & 0x80)
-        && (k = 1))
-      {}
-      k--;
-      size -= k;
-      i -= k;
-      */
       
       // reread byte1
       byte1 = input[i++]; 
@@ -458,10 +438,26 @@ export class Utf8Decoder16 {
     }
 
     // loop through input
+    const fourStop = length - 4;
     let i = startPos;
     while (i < length) {
-      while (i < length && (target[size++] = input[i++]) < 0x80) {}
-      byte1 = target[--size];
+
+      // ASCII shortcut with loop unrolled to 4 bytes
+      while(i < fourStop
+        && !((byte1 = input[i]) & 0x80)
+        && !((byte2 = input[i + 1]) & 0x80)
+        && !((byte3 = input[i + 2]) & 0x80)
+        && !((byte4 = input[i + 3]) & 0x80))
+      {
+        target[size++] = byte1;
+        target[size++] = byte2;
+        target[size++] = byte3;
+        target[size++] = byte4;
+        i += 4;
+      }
+
+      // reread byte1
+      byte1 = input[i++];
 
       // 1 byte
       if (byte1 < 0x80) {
@@ -557,7 +553,6 @@ export class Utf8Decoder16 {
           // illegal codepoint, no i-- here
           continue;
         }
-        //target[size++] = codepoint;
         codepoint -= 0x10000;
         target[size++] = (codepoint >> 10) + 0xD800;
         target[size++] = (codepoint % 0x400) + 0xDC00;
