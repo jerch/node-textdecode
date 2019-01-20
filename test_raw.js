@@ -15,17 +15,17 @@ perfContext('ASCII - aaaaaaaaaa', () => {
   new ThroughputRuntimeCase('utf8.js', () => {
     decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
   
   new ThroughputRuntimeCase('Utf8Decoder', () => {
     decoder.decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 
   new ThroughputRuntimeCase('Utf8Decoder16', () => {
     decoder16.decode(buf, target16);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 });
 
 perfContext('2 byte - ääääääääää', () => {
@@ -39,17 +39,17 @@ perfContext('2 byte - ääääääääää', () => {
   new ThroughputRuntimeCase('utf8.js', () => {
     decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
   
   new ThroughputRuntimeCase('Utf8Decoder', () => {
     decoder.decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 
   new ThroughputRuntimeCase('Utf8Decoder16', () => {
     decoder16.decode(buf, target16);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 });
 
 perfContext('3 byte - €€€€€€€€€€', () => {
@@ -63,17 +63,17 @@ perfContext('3 byte - €€€€€€€€€€', () => {
   new ThroughputRuntimeCase('utf8.js', () => {
     decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
   
   new ThroughputRuntimeCase('Utf8Decoder', () => {
     decoder.decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 
   new ThroughputRuntimeCase('Utf8Decoder16', () => {
     decoder16.decode(buf, target16);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 });
 
 perfContext('4 byte - 𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞', () => {
@@ -87,27 +87,15 @@ perfContext('4 byte - 𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞𝄞', () => {
   new ThroughputRuntimeCase('utf8.js', () => {
     decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
   
   new ThroughputRuntimeCase('Utf8Decoder', () => {
     decoder.decode(buf, target);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 
   new ThroughputRuntimeCase('Utf8Decoder16', () => {
     decoder16.decode(buf, target16);
     return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
-});
-
-perfContext('compare', () => {
-  const s = Array(5000001).join('aaaaaaaaaa');
-  const buf = new Uint8Array(Buffer.from(s));
-  const target = new Uint32Array(s.length);
-  const decoder = new Utf8Decoder();
-
-  new ThroughputRuntimeCase('decode', () => {
-    decoder.decode(buf, target);
-    return {payloadSize: s.length};
-  }, {fork: true}).showAverageRuntime().showAverageThroughput();
+  }, {fork: true}).showAverageThroughput();
 });
